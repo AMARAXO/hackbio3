@@ -1,3 +1,4 @@
+Done by @Amara and @Freddie
 #Phase One
 https://docs.google.com/document/d/1hN2SPxu2G8q1wZPW3VHFbvZDbmP9muoIWI0-OICjtnI/edit?usp=sharing
 
