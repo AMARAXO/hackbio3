@@ -32,7 +32,7 @@ cholera cases that decreased in the 1980s and increased again in the early 2000s
 this chart shows that cholera is a global disease and that there have been significant
 fluctuations in the number of cases over time
 
-![Graph5](5.png)
+![Graph5](image-2.png)
 Figure 5: Heatmap of cholera in countries which reported >50,000
 The heatmap highlights the geographic regions most affected by cholera, particularly in SubSaharan Africa and parts of Asia. The map suggests that cholera cases have fluctuated over
 time, with a peak in the 1970s followed by a decline in the 1980s. Countries, such as India and
