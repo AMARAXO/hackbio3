@@ -46,51 +46,64 @@ https\://apps.who.int/gho/data/node.main.174?lang=en![](https://lh7-rt.googleuse
 
 \
 **Codes for Visuals**
-#set libraries
+\
+**set libraries**
+\
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
 library(readr)
 library(grid)
 
-#set working directory
+**set working directory**
+\
 setwd("C:/Users/FRED/Desktop/hackbio/STAGE 3 HACKBIO")
 
-#Load Data
+**Load Data**
+/
 cholera_data <- read.csv("xmart.csv", stringsAsFactors = FALSE, header = TRUE)
 
-# Check the structure of the loaded data
+**Check the structure of the loaded data**
+\
 str(cholera_data)
 
-# View the first few rows of the data
+**View the first few rows of the data**
+\
 head(cholera_data)
 
-# Check the names of the columns
+**Check the names of the columns**
+\
 colnames(cholera_data)
 
 
-# Rename columns 
+**Rename columns **
+\
 colnames(cholera_data) <- c("Country", "Year", "ReportedCases")
 
 
-# Check the names again to verify
+**Check the names again to verify**
+\
 colnames(cholera_data)
 
 
-# Clean the data
+** Clean the data**
+\
 cholera_data$Year <- as.numeric(gsub(" ", "", cholera_data$Year))
 cholera_data$ReportedCases <- as.numeric(gsub(" ", "", cholera_data$ReportedCases))
 
-# Check the structure again to confirm changes
+** Check the structure again to confirm changes**
+\
 str(cholera_data)
 
 
-# Aggregate global cases over the years
+**Aggregate global cases over the years**
+\
 global_cases <- cholera_data %>%
   group_by(Year) %>%
   summarise(TotalCases = sum(ReportedCases, na.rm = TRUE)) 
 
-# Create a line graph
+**Create a line graph**
+\
 line_graph <- ggplot(global_cases, aes(x = Year, y = TotalCases)) +
   geom_line(color = "blue", size = 1) +
   geom_point() +
@@ -102,13 +115,15 @@ line_graph <- ggplot(global_cases, aes(x = Year, y = TotalCases)) +
 print(line_graph)
 
 
-# Filter for countries with more than 50,000 cases
+** Filter for countries with more than 50,000 cases**
+\
 high_case_countries <- cholera_data %>%
   filter(ReportedCases > 50000) %>%
   group_by(Country) %>%
   summarise(TotalCases = sum(ReportedCases, na.rm = TRUE))
 
-# Create a bar chart
+**Create a bar chart**
+\
 bar_chart_high_cases <- ggplot(high_case_countries, aes(x = reorder(Country, -TotalCases), y = TotalCases)) +
   geom_bar(stat = "identity", fill = "orange") +
   coord_flip() +
@@ -120,14 +135,16 @@ bar_chart_high_cases <- ggplot(high_case_countries, aes(x = reorder(Country, -To
 print(bar_chart_high_cases)
 
 
-# Get top 10 countries by total reported cases
+** Get top 10 countries by total reported cases**
+\
 top_10_countries <- cholera_data %>%
   group_by(Country) %>%
   summarise(TotalCases = sum(ReportedCases, na.rm = TRUE)) %>%
   arrange(desc(TotalCases)) %>%
   top_n(10, TotalCases)
 
-# Create a bar chart
+** Create a bar chart**
+\
 bar_chart_top_10 <- ggplot(top_10_countries, aes(x = reorder(Country, -TotalCases), y = TotalCases)) +
   geom_bar(stat = "identity", fill = "lightblue") +
   coord_flip() +
@@ -139,21 +156,24 @@ bar_chart_top_10 <- ggplot(top_10_countries, aes(x = reorder(Country, -TotalCase
 print(bar_chart_top_10)
 
 
-# Filter for countries with more than 50,000 cases and prepare heatmap data
+**Filter for countries with more than 50,000 cases and prepare heatmap data**
+\
 heatmap_data <- cholera_data %>%
   group_by(Country) %>%
   summarise(TotalCases = sum(ReportedCases, na.rm = TRUE)) %>%
   filter(TotalCases > 50000) %>%
   ungroup()
 
-# Create a heatmap data frame
+**Create a heatmap data frame**
+\
 heatmap_data_full <- cholera_data %>%
   filter(Country %in% heatmap_data$Country) %>%
   group_by(Year, Country) %>%
   summarise(TotalCases = sum(ReportedCases, na.rm = TRUE)) %>%
   ungroup()
 
-# Create a heatmap
+** Create a heatmap**
+\
 heatmap <- ggplot(heatmap_data_full, aes(x = Year, y = Country, fill = TotalCases)) +
   geom_tile() +
   scale_fill_viridis_c() +
@@ -165,8 +185,10 @@ heatmap <- ggplot(heatmap_data_full, aes(x = Year, y = Country, fill = TotalCase
 print(heatmap)
 
 
-# CREATING STACKED AREA CHART
-# Get the top 10 countries by total reported cases
+** CREATING STACKED AREA CHART**
+\
+** Get the top 10 countries by total reported cases**
+\
 top_10_countries <- cholera_data %>%
   group_by(Country) %>%
   summarise(TotalCases = sum(ReportedCases, na.rm = TRUE)) %>%
@@ -175,14 +197,16 @@ top_10_countries <- cholera_data %>%
   pull(Country)
 
 
-# Prepare data for stacked area chart
+** Prepare data for stacked area chart**
+\
 stacked_area_data <- cholera_data %>%
   filter(Country %in% top_10_countries) %>%
   group_by(Year, Country) %>%
   summarise(TotalCases = sum(ReportedCases, na.rm = TRUE)) %>%
   ungroup()
 
-# Create a stacked area chart
+** Create a stacked area chart**
+\
 stacked_area <- ggplot(stacked_area_data, aes(x = Year, y = TotalCases, fill = Country)) +
   geom_area(position = 'stack') +
   labs(title = "Stacked Area Chart of Cholera Cases for Top 10 Countries", 
